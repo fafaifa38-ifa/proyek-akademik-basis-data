@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Daftar Kelas Dosen{% endblock %}
+{% block content %}
+<h4>Daftar Kelas yang Diampu</h4>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>Kode MK</th><th>Mata Kuliah</th><th>Kelas</th><th>Tahun Ajaran</th>
+            <th>Peserta</th><th>Sudah Dinilai</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for k in kelas %}
+        <tr>
+            <td>{{ k.kode_mk }}</td>
+            <td>{{ k.nama_mk }}</td>
+            <td>{{ k.kelas }}</td>
+            <td>{{ k.tahun_ajaran }} - {{ k.semester }}</td>
+            <td>{{ k.jumlah_peserta }}</td>
+            <td>{{ k.jumlah_sudah_dinilai }} / {{ k.jumlah_peserta }}</td>
+            <td>
+                <a href="{{ url_for('dosen_input_nilai', id_jadwal=k.id_jadwal) }}" class="btn btn-sm btn-primary">Input Nilai</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted">Belum ada kelas.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

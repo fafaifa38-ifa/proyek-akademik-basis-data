@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Kaprodi{% endblock %}
+{% block content %}
+<h4>Dashboard Ketua Program Studi</h4>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h6 class="card-title">Total Mahasiswa Aktif</h6>
+                <h2>{{ total_mhs_aktif.total }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h6 class="card-title">Rata-rata IPK Kampus</h6>
+                <h2>{{ rata_ipk_kampus.rata_ipk if rata_ipk_kampus.rata_ipk else '-' }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mt-4">Statistik per Program Studi & Angkatan</h5>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr><th>Program Studi</th><th>Angkatan</th><th>Mahasiswa Aktif</th><th>Rata-rata IPK</th></tr>
+    </thead>
+    <tbody>
+        {% for s in statistik %}
+        <tr>
+            <td>{{ s.nama_prodi }}</td>
+            <td>{{ s.angkatan }}</td>
+            <td>{{ s.jumlah_mhs_aktif }}</td>
+            <td>{{ s.rata_rata_ipk if s.rata_rata_ipk else '-' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">Belum ada data.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h5 class="mt-4">⚠️ Mahasiswa dengan IPS &lt; 2.00 (Berisiko)</h5>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr><th>NIM</th><th>Nama</th><th>Tahun Ajaran</th><th>Semester</th><th>IPS</th></tr>
+    </thead>
+    <tbody>
+        {% for m in mhs_ips_rendah %}
+        <tr class="table-warning">
+            <td>{{ m.nim }}</td><td>{{ m.nama }}</td><td>{{ m.tahun_ajaran }}</td>
+            <td>{{ m.semester }}</td><td>{{ m.ips }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted">Tidak ada mahasiswa berisiko.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

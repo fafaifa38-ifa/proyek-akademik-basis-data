@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Kartu Rencana Studi{% endblock %}
+{% block content %}
+<h4>Kartu Rencana Studi (KRS) - Semester Aktif</h4>
+
+<h6 class="mt-4">Mata Kuliah yang Sudah Diambil</h6>
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Kode MK</th><th>Mata Kuliah</th><th>SKS</th><th>Kelas</th><th>Hari/Jam</th></tr></thead>
+    <tbody>
+        {% for k in krs_diambil %}
+        <tr>
+            <td>{{ k.kode_mk }}</td><td>{{ k.nama_mk }}</td><td>{{ k.sks }}</td>
+            <td>{{ k.kelas }}</td><td>{{ k.hari }} {{ k.jam_mulai }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted">Belum ada mata kuliah diambil.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h6 class="mt-4">Ambil Mata Kuliah Baru</h6>
+<p class="text-muted small">
+    Catatan: sistem akan otomatis menolak (trigger validasi) jika mata kuliah
+    prasyarat belum lulus.
+</p>
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Kode MK</th><th>Mata Kuliah</th><th>SKS</th><th>Kelas</th><th>Hari/Jam</th><th></th></tr></thead>
+    <tbody>
+        {% for mk in mk_tersedia %}
+        <tr>
+            <td>{{ mk.kode_mk }}</td><td>{{ mk.nama_mk }}</td><td>{{ mk.sks }}</td>
+            <td>{{ mk.kelas }}</td><td>{{ mk.hari }} {{ mk.jam_mulai }}</td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="id_jadwal" value="{{ mk.id_jadwal }}">
+                    <button type="submit" class="btn btn-sm btn-primary">Ambil</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">Tidak ada mata kuliah tersedia.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

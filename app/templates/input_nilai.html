@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Input Nilai{% endblock %}
+{% block content %}
+<h4>Input Nilai: {{ jadwal.kode_mk }} - {{ jadwal.nama_mk }} (Kelas {{ jadwal.kelas }})</h4>
+<a href="{{ url_for('dosen_dashboard') }}" class="btn btn-sm btn-outline-secondary mb-3">&larr; Kembali</a>
+
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr><th>NIM</th><th>Nama</th><th>Nilai Angka</th><th>Nilai Huruf (otomatis)</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+        {% for p in peserta %}
+        <tr>
+            <td>{{ p.nim }}</td>
+            <td>{{ p.nama }}</td>
+            <td style="width:150px;">
+                <form method="POST" class="d-flex gap-2">
+                    <input type="hidden" name="id_krs" value="{{ p.id_krs }}">
+                    <input type="number" step="0.01" min="0" max="100" name="nilai_angka"
+                           value="{{ p.nilai_angka if p.nilai_angka is not none else '' }}"
+                           class="form-control form-control-sm" required>
+            </td>
+            <td>{{ p.nilai_huruf if p.nilai_huruf else '-' }}</td>
+            <td>
+                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted">Belum ada peserta.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Jadwal Kuliah{% endblock %}
+{% block content %}
+<h4>Jadwal Kuliah Semester Aktif</h4>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>Kode MK</th><th>Mata Kuliah</th><th>SKS</th><th>Kelas</th>
+            <th>Dosen</th><th>Ruang</th><th>Hari</th><th>Jam</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for j in jadwal %}
+        <tr>
+            <td>{{ j.kode_mk }}</td>
+            <td>{{ j.nama_mk }}</td>
+            <td>{{ j.sks }}</td>
+            <td>{{ j.kelas }}</td>
+            <td>{{ j.nama_dosen }}</td>
+            <td>{{ j.nama_ruang }}</td>
+            <td>{{ j.hari }}</td>
+            <td>{{ j.jam_mulai }} - {{ j.jam_selesai }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted">Belum ada jadwal.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

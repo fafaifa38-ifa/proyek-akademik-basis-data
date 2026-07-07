@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Nilai{% endblock %}
+{% block content %}
+<h4>Daftar Nilai</h4>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>Tahun Ajaran</th><th>Semester</th><th>Kode MK</th><th>Mata Kuliah</th>
+            <th>SKS</th><th>Nilai Angka</th><th>Nilai Huruf</th><th>Bobot</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for n in nilai %}
+        <tr>
+            <td>{{ n.tahun_ajaran }}</td>
+            <td>{{ n.semester }}</td>
+            <td>{{ n.kode_mk }}</td>
+            <td>{{ n.nama_mk }}</td>
+            <td>{{ n.sks }}</td>
+            <td>{{ n.nilai_angka if n.nilai_angka is not none else '-' }}</td>
+            <td>{{ n.nilai_huruf if n.nilai_huruf else '-' }}</td>
+            <td>{{ n.bobot if n.bobot is not none else '-' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted">Belum ada nilai.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

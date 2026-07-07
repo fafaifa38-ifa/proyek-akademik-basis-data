@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Mahasiswa{% endblock %}
+{% block content %}
+<h3>Halo, {{ mhs.nama }} 👋</h3>
+<p class="text-muted">
+    NIM: {{ mhs.nim }} | Status: {{ mhs.status_mahasiswa }} |
+    Kurikulum: {{ mhs.nama_kurikulum if mhs.nama_kurikulum else '-' }}
+</p>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h6 class="card-title">IPK Terakhir</h6>
+                <h2>{{ ip.ipk if ip else '-' }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h6 class="card-title">IPS Semester Terakhir</h6>
+                <h2>{{ ip.ips if ip else '-' }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h6 class="card-title">Total SKS Lulus</h6>
+                <h2>{{ ip.total_sks_lulus if ip else '-' }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mt-4">Riwayat Beban Studi per Semester</h5>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>Tahun Ajaran</th><th>Semester</th><th>Jumlah MK</th><th>Total SKS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in beban_studi %}
+        <tr>
+            <td>{{ b.tahun_ajaran }}</td>
+            <td>{{ b.semester }}</td>
+            <td>{{ b.jumlah_mk_diambil }}</td>
+            <td>{{ b.total_sks_diambil }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">Belum ada data.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

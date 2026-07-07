@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Transkrip Nilai{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h4 class="text-center mb-1">TRANSKRIP NILAI SEMENTARA</h4>
+        <p class="text-center text-muted mb-4">Universitas Muhammadiyah Jember</p>
+
+        <table class="table table-sm mb-4">
+            <tr><td width="150"><strong>NIM</strong></td><td>: {{ mhs.nim }}</td></tr>
+            <tr><td><strong>Nama</strong></td><td>: {{ mhs.nama }}</td></tr>
+            <tr><td><strong>IPK Saat Ini</strong></td><td>: {{ ip.ipk if ip else '-' }}</td></tr>
+            <tr><td><strong>Total SKS Lulus</strong></td><td>: {{ ip.total_sks_lulus if ip else '-' }}</td></tr>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tahun Ajaran</th><th>Semester</th><th>Kode MK</th><th>Mata Kuliah</th>
+                    <th>SKS</th><th>Nilai Huruf</th><th>Bobot</th><th>Mutu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transkrip %}
+                <tr>
+                    <td>{{ t.tahun_ajaran }}</td>
+                    <td>{{ t.semester }}</td>
+                    <td>{{ t.kode_mk }}</td>
+                    <td>{{ t.nama_mk }}</td>
+                    <td>{{ t.sks }}</td>
+                    <td>{{ t.nilai_huruf }}</td>
+                    <td>{{ t.bobot }}</td>
+                    <td>{{ t.mutu }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" class="text-center text-muted">Belum ada nilai final.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="small text-muted">*Dokumen ini dicetak dari sistem, bersifat sementara dan bukan pengganti transkrip resmi.</p>
+        <button onclick="window.print()" class="btn btn-secondary btn-sm no-print">Cetak / Simpan sebagai PDF</button>
+    </div>
+</div>
+{% endblock %}
