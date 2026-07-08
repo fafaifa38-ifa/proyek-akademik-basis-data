@@ -1,0 +1,184 @@
+// =====================================================================
+// ERD - Sistem Analitik Akademik & Prestasi Mahasiswa
+// =====================================================================
+
+Table program_studi {
+  id_prodi serial [pk]
+  kode_prodi varchar(10) [unique, not null]
+  nama_prodi varchar(100) [not null]
+  jenjang varchar(10) [not null, note: 'D3/S1/S2']
+  akreditasi varchar(5)
+}
+
+Table angkatan {
+  id_angkatan serial [pk]
+  tahun_masuk int [unique, not null]
+}
+
+Table mahasiswa {
+  nim varchar(15) [pk]
+  nama varchar(100) [not null]
+  id_prodi int [ref: > program_studi.id_prodi, not null]
+  id_angkatan int [ref: > angkatan.id_angkatan, not null]
+  jenis_kelamin char(1) [note: 'L/P']
+  tanggal_lahir date
+  alamat text
+  email varchar(100) [unique]
+  no_hp varchar(20)
+  status_mahasiswa varchar(20) [not null, note: 'Aktif/Cuti/Lulus/DO', default: 'Aktif']
+  created_at timestamp [default: `now()`]
+}
+
+Table dosen {
+  id_dosen serial [pk]
+  nidn varchar(20) [unique, not null]
+  nama varchar(100) [not null]
+  id_prodi int [ref: > program_studi.id_prodi]
+  email varchar(100) [unique]
+  no_hp varchar(20)
+}
+
+Table tahun_akademik {
+  id_tahun_akademik serial [pk]
+  tahun_ajaran varchar(9) [not null, note: 'contoh: 2024/2025']
+  semester varchar(6) [not null, note: 'Ganjil/Genap']
+  is_aktif boolean [default: false]
+
+  indexes {
+    (tahun_ajaran, semester) [unique]
+  }
+}
+
+Table mata_kuliah {
+  kode_mk varchar(10) [pk]
+  nama_mk varchar(100) [not null]
+  sks int [not null]
+  id_prodi int [ref: > program_studi.id_prodi]
+  semester_ke int [note: 'semester rekomendasi di kurikulum']
+}
+
+Table prasyarat_mk {
+  kode_mk varchar(10) [ref: > mata_kuliah.kode_mk]
+  kode_mk_prasyarat varchar(10) [ref: > mata_kuliah.kode_mk]
+
+  indexes {
+    (kode_mk, kode_mk_prasyarat) [pk]
+  }
+}
+
+Table ruang_kelas {
+  id_ruang serial [pk]
+  nama_ruang varchar(20) [unique, not null]
+  gedung varchar(50)
+  kapasitas int
+}
+
+Table jadwal_kuliah {
+  id_jadwal serial [pk]
+  kode_mk varchar(10) [ref: > mata_kuliah.kode_mk, not null]
+  id_dosen int [ref: > dosen.id_dosen, not null]
+  id_ruang int [ref: > ruang_kelas.id_ruang]
+  id_tahun_akademik int [ref: > tahun_akademik.id_tahun_akademik, not null]
+  kelas varchar(5) [not null, note: 'A/B/C']
+  hari varchar(10)
+  jam_mulai time
+  jam_selesai time
+  kuota int [default: 40]
+
+  indexes {
+    (kode_mk, kelas, id_tahun_akademik) [unique]
+  }
+}
+
+Table krs {
+  id_krs serial [pk]
+  nim varchar(15) [ref: > mahasiswa.nim, not null]
+  id_jadwal int [ref: > jadwal_kuliah.id_jadwal, not null]
+  id_tahun_akademik int [ref: > tahun_akademik.id_tahun_akademik, not null, note: 'DENORMALISASI SENGAJA: secara teori nilai ini sama dengan jadwal_kuliah.id_tahun_akademik (via id_jadwal), disimpan ulang di sini agar query filter per semester tidak perlu JOIN ke jadwal_kuliah. Aplikasi WAJIB selalu mengisi kolom ini dari jadwal_kuliah yang sama saat INSERT KRS (lihat app.py) supaya data tetap konsisten.']
+  tanggal_input timestamp [default: `now()`]
+  status_krs varchar(20) [default: 'Aktif', note: 'Aktif/Batal']
+
+  indexes {
+    (nim, id_jadwal) [unique]
+  }
+}
+
+Table nilai {
+  id_nilai serial [pk]
+  id_krs int [ref: - krs.id_krs, not null, unique]
+  nilai_angka numeric(5,2)
+  nilai_huruf varchar(2)
+  bobot numeric(3,2)
+  tanggal_input timestamp [default: `now()`]
+}
+
+Table ringkasan_ip {
+  nim varchar(15) [ref: > mahasiswa.nim]
+  id_tahun_akademik int [ref: > tahun_akademik.id_tahun_akademik]
+  ips numeric(4,2)
+  sks_semester int
+  ipk numeric(4,2)
+  total_sks_lulus int
+  updated_at timestamp [default: `now()`]
+
+  indexes {
+    (nim, id_tahun_akademik) [pk]
+  }
+}
+
+Table beasiswa {
+  id_beasiswa serial [pk]
+  nama_beasiswa varchar(100)
+  sumber varchar(50)
+  nominal numeric(12,2)
+}
+
+Table penerima_beasiswa {
+  id_penerima serial [pk]
+  nim varchar(15) [ref: > mahasiswa.nim, not null]
+  id_beasiswa int [ref: > beasiswa.id_beasiswa, not null]
+  id_tahun_akademik int [ref: > tahun_akademik.id_tahun_akademik, not null]
+  status varchar(20) [default: 'Aktif']
+
+  indexes {
+    (nim, id_beasiswa, id_tahun_akademik) [unique]
+  }
+}
+
+Table prestasi_non_akademik {
+  id_prestasi serial [pk]
+  nim varchar(15) [ref: > mahasiswa.nim, not null]
+  nama_prestasi varchar(150)
+  tingkat varchar(30) [note: 'Lokal/Nasional/Internasional']
+  tahun int
+  keterangan text
+}
+
+Table users {
+  id_user serial [pk]
+  username varchar(50) [unique, not null]
+  password_hash varchar(255) [not null]
+  role varchar(20) [not null, note: 'admin/mahasiswa/dosen/kaprodi']
+  nim varchar(15) [ref: > mahasiswa.nim]
+  id_dosen int [ref: > dosen.id_dosen]
+}
+
+Table kurikulum {
+  id_kurikulum serial [pk]
+  id_prodi int [ref: > program_studi.id_prodi, not null]
+  nama_kurikulum varchar(50) [not null, note: 'contoh: Kurikulum 2023']
+  tahun_berlaku int [not null]
+  is_aktif boolean [default: true]
+}
+
+Table kurikulum_mk {
+  id_kurikulum int [ref: > kurikulum.id_kurikulum]
+  kode_mk varchar(10) [ref: > mata_kuliah.kode_mk]
+  semester_ke int [not null, note: 'semester rekomendasi versi kurikulum ini']
+  sifat varchar(10) [note: 'Wajib/Pilihan']
+
+  indexes {
+    (id_kurikulum, kode_mk) [pk]
+  }
+}
+
