@@ -40,8 +40,8 @@ data statis.
 | Database | PostgreSQL |
 | Backend | Python (Flask) |
 | Frontend | HTML, Bootstrap, Jinja2 |
-| Hosting Database | Neon |
-| Hosting Aplikasi | Render |
+| Hosting Database | PostgresSQL |
+| Hosting Aplikasi | Domenesia |
 
 ## Struktur Basis Data
 
