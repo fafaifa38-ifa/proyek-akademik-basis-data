@@ -53,8 +53,7 @@ data statis.
 ## Cara Menjalankan Secara Lokal
 
 1. Clone repository ini
-2. Buat database PostgreSQL, jalankan script di folder `sql/` secara berurutan
-   (01 → 02 → 03 → 04)
+2. Buat database PostgreSQL, jalankan script di folder `sql/`
 3. Masuk ke folder `app/`, buat virtual environment, lalu:
    pip install -r requerements.txt
 4. Copy `.env.example` menjadi `.env`, isi `DATABASE_URL` sesuai database kamu
@@ -63,12 +62,7 @@ data statis.
 
 ## Akses Sistem Online
 
-**URL Aplikasi:** [ISI URL RENDER, contoh: https://si-akademik.onrender.com]
-
-> Catatan: aplikasi di-hosting menggunakan tier gratis Render, sehingga
-> mungkin butuh waktu 30–50 detik untuk merespons pada akses pertama setelah
-> tidak ada aktivitas (server dalam kondisi "tidur"). Silakan tunggu sejenak
-> dan reload halaman.
+**URL Aplikasi:** [https://sistemakademik.web.id]
 
 **Akun Demo untuk Dosen:**
 
@@ -81,8 +75,8 @@ data statis.
 
 ## Link Terkait
 
-- Repository GitHub: [ISI LINK REPO INI]
-- Laporan Lengkap (PDF): [ISI LINK/NAMA FILE LAPORAN]
+- Repository GitHub: [https://github.com/fafaifa38-ifa/proyek-akademik-basis-data]
+- Laporan Lengkap (PDF): [Laporan_Proyek_Akhir_Basis_Data_(KHOLIFATUR, VANDHORA,FIKE)]
 - ERD: folder `erd/erd.dbml` (dapat dibuka di dbdiagram.io)
 
 ## Struktur Folder Repository
